@@ -1,25 +1,30 @@
 import java.util.Random;
 import java.util.Scanner;
 
+// Lucky7 -variaatiopeli, jossa heitetään noppaa 3 kertaa,
+// yrittäen saada 7-numeroita. Jokaisesta seiskasta voittaa.
 public class Lucky7_game {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         Random r = new Random();
 
-        // Pelaajan rahat: 5€ alkuun, pelimaksu on 1€.
+        // Pelimaksu on 1€. Pelaaja syöttää pelirahansa määrän.
         // Jos pelaaja saa yhden seiskan, voittaa hän 3€, kahdesta 5€, kolmesta 7€.
-        // Jos rahat loppuvat, peli loppuu.
-        int pelaajanRahat = 5;
+        // Jos rahat loppuvat, peli loppuu. Jos pelaaja kirjoittaa "e" kysyttäessä, peli loppuu.
+        int pelaajanRahat = 0;
         int pelimaksu = 1;
         int voittoYksi7 = 3;
         int voittoKaksi7 = 5;
         int voittoKolme7 = 7;
-        int seiskoja = 0;
+        
+        System.out.println("Syötä rahamäärä jolla haluat pelata (min. 1 euro):");
+        pelaajanRahat = Integer.parseInt(sc.nextLine());
+        System.out.println("Saldosi: " + pelaajanRahat + " euroa.");
 
-        // Looppi kertoo voititko vai hävisitkö, jos yksi numeroistasi oli 7. Peli loppuu.
+        // Rahat on syötetty, peli voi alkaa.
         while (true) {
-            //System.out.println("Syötä rahamäärä jolla haluat pelata (min. 1€):");
-            //pelaajanRahat = sc.nextInt();
+            // Vähennetään pelimaksu.
+            int seiskoja = 0;
             pelaajanRahat -= pelimaksu;
             System.out.println("Pelimaksu -1 euro käytetty, peli alkaa.");
             System.out.println("Arvotaan numerot:");
@@ -32,6 +37,7 @@ public class Lucky7_game {
             System.out.println(arvottuNmr2);
             System.out.println(arvottuNmr3);
 
+            // Lasketaan kuinka monta 7-numeroa pelaaja sai.
             if (arvottuNmr1 == 7 && arvottuNmr2 == 7 && arvottuNmr3 == 7) {
                 seiskoja += 3;
             } else if (arvottuNmr1 == 7 && arvottuNmr2 == 7) {
@@ -44,6 +50,7 @@ public class Lucky7_game {
                 seiskoja += 1;
             }
 
+            // Peli ilmoittaa pelaajalle voitonmaksun/häviön ja saldon.
             switch (seiskoja) {
                 case 1:
                     pelaajanRahat += voittoYksi7;
@@ -69,11 +76,18 @@ public class Lucky7_game {
                     break;
             }
 
-            seiskoja = 0;
-            
+            // Mikäli pelirahat ovat loppuneet, peli loppuu.
+            // Muutoin peli kysyy haluatko jatkaa pelaamista vai sulkea pelin.
             if (pelaajanRahat <= 0) {
                 System.out.println("Pelirahat ovat loppuneet.\nGame Over!");
                 break;
+            } else {
+                System.out.println("Haluatko pelata uudestaan? Jos haluat pelata, paina Enter.\nJos et halua pelata, kirjoita 'e' ja paina Enter.");
+                String uusiPeli = sc.nextLine();
+                if (uusiPeli.equalsIgnoreCase("e")) {
+                    System.out.println("Game over!");
+                    break;
+                }
             }
         }
     }
